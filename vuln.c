@@ -7,4 +7,5 @@ int main(){
     printf("What's your name, kind stranger?");
     scanf("%s", buf);
     printf("Hello, %s\n", buf);
+    return 0;
 }
