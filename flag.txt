@@ -1,0 +1,1 @@
+congrats you catted the contents of flag.txt from hijacking vuln.c ! 

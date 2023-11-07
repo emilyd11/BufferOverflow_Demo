@@ -1,10 +1,10 @@
 #include <stdio.h> 
 #include <string.h> 
 
-int main(){
+int main(int argc, char **argv){
+    /* initializing 256-byte buffer */
     char buf[256];
-    printf("Welcome!\n");
-    printf("What's your name, kind stranger?");
+    printf("What's your name, kind stranger?\n");
     scanf("%s", buf);
     printf("Hello, %s\n", buf);
     return 0;
